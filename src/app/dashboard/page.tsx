@@ -9,9 +9,10 @@ import GapReport from '@/components/GapReport';
 import DocumentsList from '@/components/DocumentsList';
 import FinancePlanView from '@/components/FinancePlanView';
 import TaxCreditBrowser from '@/components/TaxCreditBrowser';
+import ContractReader from '@/components/ContractReader';
 import { DeliverySchedule, UploadedDocument, GapReport as GapReportType, FinancePlan } from '@/lib/types';
 
-type TabType = 'delivery' | 'documents' | 'finance' | 'tax-credits';
+type TabType = 'delivery' | 'documents' | 'contracts' | 'finance' | 'tax-credits';
 
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState<TabType>('delivery');
@@ -195,6 +196,7 @@ export default function Dashboard() {
                 {([
                   { id: 'delivery' as TabType, label: 'Delivery', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
                   { id: 'documents' as TabType, label: 'Documents', icon: 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z' },
+                  { id: 'contracts' as TabType, label: 'Contracts', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z' },
                   { id: 'finance' as TabType, label: 'Finance', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
                   { id: 'tax-credits' as TabType, label: 'Tax Credits', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
                 ] as const).map((tab) => (
@@ -261,6 +263,14 @@ export default function Dashboard() {
                 <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
                   <h2 className="text-xl font-bold text-white mb-4">Contracts & Documents</h2>
                   <DocumentsList documents={documents} onDocumentsChange={setDocuments} />
+                </div>
+              )}
+
+              {currentTab === 'contracts' && (
+                <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+                  <h2 className="text-xl font-bold text-white mb-2">AI Contract Reader</h2>
+                  <p className="text-sm text-white/30 mb-6">Upload a distribution agreement and we&apos;ll extract key terms, red flags, and delivery obligations.</p>
+                  <ContractReader />
                 </div>
               )}
 
