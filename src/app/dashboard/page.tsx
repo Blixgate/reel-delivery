@@ -10,12 +10,13 @@ import DocumentsList from '@/components/DocumentsList';
 import FinancePlanView from '@/components/FinancePlanView';
 import TaxCreditBrowser from '@/components/TaxCreditBrowser';
 import ContractReader from '@/components/ContractReader';
+import ProjectWorkspace from '@/components/ProjectWorkspace';
 import { DeliverySchedule, UploadedDocument, GapReport as GapReportType, FinancePlan } from '@/lib/types';
 
-type TabType = 'delivery' | 'documents' | 'contracts' | 'finance' | 'tax-credits';
+type TabType = 'project' | 'delivery' | 'documents' | 'contracts' | 'finance' | 'tax-credits';
 
 export default function Dashboard() {
-  const [currentTab, setCurrentTab] = useState<TabType>('delivery');
+  const [currentTab, setCurrentTab] = useState<TabType>('project');
   const [schedule, setSchedule] = useState<DeliverySchedule | null>(null);
   const [documents, setDocuments] = useState<UploadedDocument[]>([]);
   const [gapReport, setGapReport] = useState<GapReportType | null>(null);
@@ -156,44 +157,12 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {!schedule ? (
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 mb-6 backdrop-blur-sm">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                Upload Your Delivery Schedule
-              </h2>
-              <p className="text-white/40 text-sm mb-6">Drop your delivery schedule to get started. We support .docx, .pdf, and .txt files.</p>
-              <FileUpload
-                onFileUpload={handleFileUpload}
-                isLoading={isLoading}
-                error={error}
-              />
-            </div>
-
-            <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6">
-              <h3 className="font-semibold text-white/60 mb-4 text-sm uppercase tracking-wider">Workflow</h3>
-              <div className="space-y-3">
-                {[
-                  'Upload your delivery schedule document',
-                  'Upload contracts and agreements to track fulfillment',
-                  'Analyze gaps to identify missing deliverables',
-                  'Generate a finance plan with tax incentives',
-                  'Browse and compare tax credit programs',
-                ].map((step, i) => (
-                  <div key={i} className="flex items-center gap-3 text-sm text-white/40">
-                    <span className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-xs text-white/30 font-mono">{i + 1}</span>
-                    <span>{step}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        ) : (
           <div className="space-y-6">
             {/* Tab Navigation */}
             <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] sticky top-[73px] z-40 backdrop-blur-xl">
               <div className="flex border-b border-white/[0.06] overflow-x-auto">
                 {([
+                  { id: 'project' as TabType, label: 'Project', icon: 'M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776' },
                   { id: 'delivery' as TabType, label: 'Delivery', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
                   { id: 'documents' as TabType, label: 'Documents', icon: 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z' },
                   { id: 'contracts' as TabType, label: 'Contracts', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z' },
@@ -220,7 +189,15 @@ export default function Dashboard() {
 
             {/* Tab Content */}
             <div className="space-y-6">
-              {currentTab === 'delivery' && (
+              {currentTab === 'project' && (
+                <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+                  <h2 className="text-xl font-bold text-white mb-2">Project Workspace</h2>
+                  <p className="text-sm text-white/30 mb-6">Upload all your documents — delivery schedules, contracts, sales estimates — and we&apos;ll build everything automatically.</p>
+                  <ProjectWorkspace />
+                </div>
+              )}
+
+              {currentTab === 'delivery' && schedule && (
                 <div className="space-y-6">
                   <StatsBar schedule={schedule} />
 
@@ -278,7 +255,11 @@ export default function Dashboard() {
                 <div className="space-y-6">
                   <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
                     <h2 className="text-xl font-bold text-white mb-4">Finance Plan Generator</h2>
-                    <FinancePlanForm schedule={schedule} isLoading={isLoading} onSubmit={handleGenerateFinancePlan} />
+                    {schedule ? (
+                      <FinancePlanForm schedule={schedule} isLoading={isLoading} onSubmit={handleGenerateFinancePlan} />
+                    ) : (
+                      <p className="text-white/30 text-sm">Upload a delivery schedule first to use the finance plan generator, or use the Project tab to upload all documents at once.</p>
+                    )}
                   </div>
 
                   {financePlan && (
@@ -304,7 +285,6 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-        )}
       </main>
     </div>
   );
