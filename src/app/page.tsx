@@ -58,7 +58,7 @@ export default function LandingPage() {
       {/* Hero */}
       <section
         ref={heroRef}
-        className="relative pt-48 pb-24 md:pt-64 md:pb-40"
+        className="relative pt-52 pb-24 md:pt-72 md:pb-40"
         style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
       >
         {/* Gradient orbs */}
