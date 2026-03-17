@@ -122,10 +122,10 @@ export default function DocumentsList({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all ${
+        className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
           isDragging
-            ? 'border-[#2E5D8A] bg-blue-50'
-            : 'border-gray-300 hover:border-[#2E5D8A]'
+            ? 'border-[#B8860B]/40 bg-[#B8860B]/5'
+            : 'border-[#E2DACB] hover:border-[#B8860B]/40'
         } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
         <input
@@ -141,27 +141,13 @@ export default function DocumentsList({
         <div className="flex flex-col items-center gap-3">
           {isLoading ? (
             <>
-              <div className="animate-spin">
-                <svg
-                  className="w-8 h-8 text-[#1B3A5C]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <p className="text-gray-600">Classifying documents...</p>
+              <div className="w-8 h-8 border-2 border-[#B8860B]/30 border-t-[#B8860B] rounded-full animate-spin" />
+              <p className="text-[#8C8577]" style={{ fontFamily: 'Georgia, serif' }}>Classifying documents...</p>
             </>
           ) : (
             <>
               <svg
-                className="w-8 h-8 text-[#1B3A5C]"
+                className="w-8 h-8 text-[#E2DACB]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -169,15 +155,15 @@ export default function DocumentsList({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={1.5}
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
               <div>
-                <p className="text-lg font-semibold text-[#1B3A5C]">
+                <p className="text-lg font-semibold text-[#1A1714]">
                   Drop documents here
                 </p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-[#8C8577] mt-1" style={{ fontFamily: 'Georgia, serif' }}>
                   or click to browse (contracts, agreements, certificates)
                 </p>
               </div>
@@ -188,26 +174,26 @@ export default function DocumentsList({
 
       {/* Documents Grid */}
       {documents.length > 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-900">
+        <div className="bg-white rounded-xl border border-[#E2DACB] overflow-hidden">
+          <div className="px-6 py-4 border-b border-[#E2DACB]">
+            <h3 className="font-semibold text-[#1A1714]">
               Documents ({documents.length})
             </h3>
           </div>
 
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-[#E2DACB]/60">
             {documents.map((doc) => (
               <div key={doc.id} className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h4 className="font-semibold text-gray-900 break-words">
+                    <h4 className="font-semibold text-[#1A1714] break-words">
                       {doc.filename}
                     </h4>
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="inline-block px-3 py-1 bg-[#1B3A5C] text-white text-xs font-medium rounded-full">
+                      <span className="inline-block px-3 py-1 bg-[#1A1714] text-[#FDFBF7] text-xs font-medium rounded-full">
                         {DOCUMENT_TYPE_LABELS[doc.documentType]}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-[#8C8577]">
                         {formatFileSize(doc.fileSize)}
                       </span>
                     </div>
@@ -219,7 +205,7 @@ export default function DocumentsList({
                         documents.filter((d) => d.id !== doc.id)
                       );
                     }}
-                    className="text-red-600 hover:text-red-800 transition-colors"
+                    className="text-[#C0392B]/60 hover:text-[#C0392B] transition-colors"
                     title="Remove document"
                   >
                     <svg
@@ -240,14 +226,14 @@ export default function DocumentsList({
 
                 {doc.fulfills && doc.fulfills.length > 0 && (
                   <div className="mt-3">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">
+                    <p className="text-xs text-[#8C8577] uppercase tracking-wide font-semibold mb-2">
                       Fulfills Delivery Items
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {doc.fulfills.map((itemId) => (
                         <span
                           key={itemId}
-                          className="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded"
+                          className="inline-block px-2 py-1 bg-[#2D7A4F]/10 text-[#2D7A4F] text-xs font-medium rounded-full"
                         >
                           Item ID: {itemId.substring(0, 8)}...
                         </span>
@@ -258,13 +244,13 @@ export default function DocumentsList({
 
                 {doc.fulfills && doc.fulfills.length === 0 && (
                   <div className="mt-3">
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#8C8577]" style={{ fontFamily: 'Georgia, serif' }}>
                       No delivery items matched for this document
                     </p>
                   </div>
                 )}
 
-                <div className="mt-3 text-xs text-gray-400">
+                <div className="mt-3 text-xs text-[#8C8577]/60">
                   Uploaded {new Date(doc.uploadedAt).toLocaleDateString()}
                 </div>
               </div>
@@ -274,8 +260,8 @@ export default function DocumentsList({
       )}
 
       {documents.length === 0 && (
-        <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200">
-          <p className="text-gray-500">
+        <div className="bg-[#F5F0E8]/50 rounded-xl p-8 text-center border border-[#E2DACB]">
+          <p className="text-[#8C8577]" style={{ fontFamily: 'Georgia, serif' }}>
             No documents uploaded yet. Upload contracts, agreements, and
             certifications to track your delivery requirements.
           </p>

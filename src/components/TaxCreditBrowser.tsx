@@ -15,11 +15,9 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
   const [minPercentageFilter, setMinPercentageFilter] = useState<string>('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Get unique countries
   const countries = Array.from(new Set(programs.map((p) => p.country))).sort();
 
   useEffect(() => {
-    // Fetch tax incentive programs
     const fetchPrograms = async () => {
       setIsLoading(true);
       try {
@@ -54,33 +52,32 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
       filtered = filtered.filter((p) => p.basePercentage >= minPercent);
     }
 
-    // Sort by percentage descending
     filtered.sort((a, b) => b.basePercentage - a.basePercentage);
     setFilteredPrograms(filtered);
   }, [programs, countryFilter, minPercentageFilter]);
 
   const CREDIT_TYPE_COLORS = {
-    refundable: 'bg-green-100 text-green-800',
-    transferable: 'bg-blue-100 text-blue-800',
-    non_refundable: 'bg-orange-100 text-orange-800',
-    rebate: 'bg-purple-100 text-purple-800',
-    grant: 'bg-pink-100 text-pink-800',
+    refundable: 'bg-[#2D7A4F]/10 text-[#2D7A4F]',
+    transferable: 'bg-blue-50 text-blue-700',
+    non_refundable: 'bg-[#B8860B]/10 text-[#B8860B]',
+    rebate: 'bg-violet-50 text-violet-700',
+    grant: 'bg-pink-50 text-pink-700',
   };
 
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Filters</h3>
+      <div className="bg-white rounded-xl border border-[#E2DACB] p-6">
+        <h3 className="font-semibold text-[#1A1714] mb-4">Filters</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs font-medium text-[#8C8577] mb-1.5">
               Country
             </label>
             <select
               value={countryFilter}
               onChange={(e) => setCountryFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E5D8A]"
+              className="w-full px-3.5 py-2.5 bg-white border border-[#E2DACB] rounded-lg text-[#1A1714] text-sm focus:outline-none focus:ring-2 focus:ring-[#B8860B]/20 focus:border-[#B8860B]/40 transition-all"
             >
               <option value="">All Countries</option>
               {countries.map((country) => (
@@ -92,13 +89,13 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs font-medium text-[#8C8577] mb-1.5">
               Minimum Percentage
             </label>
             <select
               value={minPercentageFilter}
               onChange={(e) => setMinPercentageFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2E5D8A]"
+              className="w-full px-3.5 py-2.5 bg-white border border-[#E2DACB] rounded-lg text-[#1A1714] text-sm focus:outline-none focus:ring-2 focus:ring-[#B8860B]/20 focus:border-[#B8860B]/40 transition-all"
             >
               <option value="">Any percentage</option>
               <option value="15">15% or higher</option>
@@ -114,7 +111,7 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
                 setCountryFilter('');
                 setMinPercentageFilter('');
               }}
-              className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              className="w-full px-4 py-2.5 bg-[#F5F0E8] text-[#1A1714] rounded-lg hover:bg-[#EDE7DB] transition-colors font-medium text-sm border border-[#E2DACB]"
             >
               Reset Filters
             </button>
@@ -124,32 +121,18 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
 
       {/* Results */}
       <div>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-[#8C8577] mb-4" style={{ fontFamily: 'Georgia, serif' }}>
           Showing {filteredPrograms.length} tax incentive program
           {filteredPrograms.length !== 1 ? 's' : ''}
         </p>
 
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin">
-              <svg
-                className="w-8 h-8 text-[#1B3A5C]"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
+            <div className="w-8 h-8 border-2 border-[#B8860B]/30 border-t-[#B8860B] rounded-full animate-spin" />
           </div>
         ) : filteredPrograms.length === 0 ? (
-          <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200">
-            <p className="text-gray-500">
+          <div className="bg-[#F5F0E8]/50 rounded-xl p-8 text-center border border-[#E2DACB]">
+            <p className="text-[#8C8577]" style={{ fontFamily: 'Georgia, serif' }}>
               No programs match your filters. Try adjusting your search.
             </p>
           </div>
@@ -158,26 +141,26 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
             {filteredPrograms.map((program) => (
               <div
                 key={program.id}
-                className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-white rounded-xl border border-[#E2DACB] overflow-hidden hover:shadow-lg hover:shadow-[#1A1714]/[0.04] transition-shadow"
               >
                 <div className="p-6">
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-lg">
+                      <h3 className="font-semibold text-[#1A1714] text-lg">
                         {program.programName}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-[#8C8577]" style={{ fontFamily: 'Georgia, serif' }}>
                         {program.jurisdiction}
                         {program.region && `, ${program.region}`}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-3xl font-bold text-[#1B3A5C]">
+                      <p className="text-3xl font-bold text-[#1A1714]">
                         {program.basePercentage}%
                       </p>
                       <span
-                        className={`inline-block px-2 py-1 rounded text-xs font-semibold mt-1 ${
+                        className={`inline-block px-2 py-1 rounded-full text-[10px] font-semibold mt-1 ${
                           CREDIT_TYPE_COLORS[program.creditType]
                         }`}
                       >
@@ -189,21 +172,21 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
                   {/* Quick Stats */}
                   <div className="grid grid-cols-2 gap-3 mb-4">
                     {program.minimumSpend && (
-                      <div className="bg-gray-50 p-2 rounded">
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">
+                      <div className="bg-[#F5F0E8]/50 p-2 rounded-lg">
+                        <p className="text-xs text-[#8C8577] uppercase tracking-wide">
                           Min Spend
                         </p>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-[#1A1714]">
                           ${(program.minimumSpend / 1000000).toFixed(1)}M
                         </p>
                       </div>
                     )}
                     {program.capPerProject && (
-                      <div className="bg-gray-50 p-2 rounded">
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">
+                      <div className="bg-[#F5F0E8]/50 p-2 rounded-lg">
+                        <p className="text-xs text-[#8C8577] uppercase tracking-wide">
                           Project Cap
                         </p>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-[#1A1714]">
                           ${(program.capPerProject / 1000000).toFixed(1)}M
                         </p>
                       </div>
@@ -213,14 +196,14 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
                   {/* Bonuses */}
                   {program.bonusPercentages && program.bonusPercentages.length > 0 && (
                     <div className="mb-4">
-                      <p className="text-xs text-gray-600 font-semibold mb-2">
+                      <p className="text-xs text-[#8C8577] font-semibold mb-2">
                         Available Bonuses:
                       </p>
-                      <ul className="text-xs text-gray-600 space-y-1">
+                      <ul className="text-xs text-[#8C8577] space-y-1">
                         {program.bonusPercentages.map((bonus, idx) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <span className="text-green-600 font-bold">+{bonus.additionalPercentage}%</span>
-                            <span>{bonus.description}</span>
+                            <span className="text-[#2D7A4F] font-bold">+{bonus.additionalPercentage}%</span>
+                            <span style={{ fontFamily: 'Georgia, serif' }}>{bonus.description}</span>
                           </li>
                         ))}
                       </ul>
@@ -232,7 +215,7 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
                     onClick={() =>
                       setExpandedId(expandedId === program.id ? null : program.id)
                     }
-                    className="w-full text-left text-sm font-medium text-[#1B3A5C] hover:text-[#2E5D8A] transition-colors flex items-center justify-between"
+                    className="w-full text-left text-sm font-medium text-[#B8860B] hover:text-[#9A7209] transition-colors flex items-center justify-between"
                   >
                     <span>
                       {expandedId === program.id ? 'Hide' : 'Show'} Details
@@ -257,17 +240,17 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
 
                 {/* Expanded Details */}
                 {expandedId === program.id && (
-                  <div className="border-t border-gray-200 bg-gray-50 p-6 space-y-4">
+                  <div className="border-t border-[#E2DACB] bg-[#F5F0E8]/30 p-6 space-y-4">
                     <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">
+                      <p className="text-xs text-[#8C8577] uppercase tracking-wide font-semibold mb-2">
                         Qualifying Expenses
                       </p>
-                      <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                      <ul className="text-sm text-[#1A1714] space-y-1 list-disc list-inside" style={{ fontFamily: 'Georgia, serif' }}>
                         {program.qualifyingExpenses.slice(0, 4).map((expense, idx) => (
                           <li key={idx}>{expense}</li>
                         ))}
                         {program.qualifyingExpenses.length > 4 && (
-                          <li className="text-gray-500">
+                          <li className="text-[#8C8577]">
                             and {program.qualifyingExpenses.length - 4} more...
                           </li>
                         )}
@@ -275,17 +258,17 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
                     </div>
 
                     <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">
+                      <p className="text-xs text-[#8C8577] uppercase tracking-wide font-semibold mb-2">
                         Timeline
                       </p>
-                      <p className="text-sm text-gray-700">{program.typicalTimeline}</p>
+                      <p className="text-sm text-[#1A1714]" style={{ fontFamily: 'Georgia, serif' }}>{program.typicalTimeline}</p>
                     </div>
 
                     <div>
-                      <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">
+                      <p className="text-xs text-[#8C8577] uppercase tracking-wide font-semibold mb-2">
                         Residency Requirements
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-[#1A1714]" style={{ fontFamily: 'Georgia, serif' }}>
                         {program.residencyRequirements}
                       </p>
                     </div>
@@ -295,7 +278,7 @@ export default function TaxCreditBrowser({ isLoading: initialLoading = false }: 
                         href={program.websiteUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block px-3 py-1 bg-[#1B3A5C] text-white text-xs font-medium rounded hover:bg-[#2E5D8A] transition-colors"
+                        className="inline-block px-4 py-2 bg-[#1A1714] text-[#FDFBF7] text-xs font-medium rounded-lg hover:bg-[#2A2720] transition-colors"
                       >
                         Visit Official Site
                       </a>

@@ -35,20 +35,20 @@ interface DeliverableItem {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'Technical': 'bg-blue-500/15 text-blue-400',
-  'Audio': 'bg-violet-500/15 text-violet-400',
-  'Marketing': 'bg-pink-500/15 text-pink-400',
-  'Legal': 'bg-amber-500/15 text-amber-400',
-  'Accessibility': 'bg-emerald-500/15 text-emerald-400',
-  'Financial': 'bg-cyan-500/15 text-cyan-400',
-  'default': 'bg-white/[0.06] text-white/40',
+  'Technical': 'bg-blue-50 text-blue-700',
+  'Audio': 'bg-violet-50 text-violet-700',
+  'Marketing': 'bg-pink-50 text-pink-700',
+  'Legal': 'bg-amber-50 text-amber-700',
+  'Accessibility': 'bg-emerald-50 text-emerald-700',
+  'Financial': 'bg-cyan-50 text-cyan-700',
+  'default': 'bg-[#F5F0E8] text-[#8C8577]',
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  'not-started': 'text-white/30',
-  'in-progress': 'text-amber-400',
-  'complete': 'text-emerald-400',
-  'blocked': 'text-red-400',
+  'not-started': 'text-[#8C8577]',
+  'in-progress': 'text-[#B8860B]',
+  'complete': 'text-[#2D7A4F]',
+  'blocked': 'text-[#C0392B]',
 };
 
 export default function ProjectWorkspace() {
@@ -119,7 +119,6 @@ export default function ProjectWorkspace() {
     let financeResult: FinancePlan | null = null;
 
     try {
-      // 1. Process delivery schedules
       const schedules = project.documents.filter(d => d.type === 'delivery-schedule');
       for (const doc of schedules) {
         setProject(prev => ({ ...prev, processingStep: `Parsing delivery schedule: ${doc.name}` }));
@@ -128,7 +127,6 @@ export default function ProjectWorkspace() {
         const res = await fetch('/api/parse', { method: 'POST', body: formData });
         if (res.ok) {
           const schedule = await res.json();
-          // Convert schedule items to deliverables
           for (const item of schedule.items || []) {
             allDeliverables.push({
               id: item.id || crypto.randomUUID(),
@@ -143,7 +141,6 @@ export default function ProjectWorkspace() {
         }
       }
 
-      // 2. Process contracts
       const contracts = project.documents.filter(d => d.type === 'contract');
       for (const doc of contracts) {
         setProject(prev => ({ ...prev, processingStep: `Analyzing contract: ${doc.name}` }));
@@ -152,7 +149,6 @@ export default function ProjectWorkspace() {
         const res = await fetch('/api/analyze-contract', { method: 'POST', body: formData });
         if (res.ok) {
           contractResult = await res.json();
-          // Add contract obligations as deliverables
           for (const ob of contractResult?.deliveryObligations || []) {
             const existing = allDeliverables.find(d => d.name.toLowerCase().includes(ob.item.toLowerCase().split(' ')[0]));
             if (!existing) {
@@ -171,7 +167,6 @@ export default function ProjectWorkspace() {
         }
       }
 
-      // 3. Process sales estimates → finance plan
       const salesDocs = project.documents.filter(d => d.type === 'sales-estimates');
       if (salesDocs.length > 0) {
         setProject(prev => ({ ...prev, processingStep: 'Generating finance plan from sales estimates...' }));
@@ -181,7 +176,6 @@ export default function ProjectWorkspace() {
         formData.append('budget', '5000000');
         formData.append('shootLocation', 'Georgia');
 
-        // If there's a contract with sales agency info, add it
         if (contracts.length > 0) {
           formData.append('salesAgency', contracts[0].file);
         }
@@ -192,7 +186,6 @@ export default function ProjectWorkspace() {
         }
       }
 
-      // 4. Set the results
       setProject(prev => ({
         ...prev,
         deliverables: allDeliverables,
@@ -202,7 +195,6 @@ export default function ProjectWorkspace() {
         processingStep: '',
       }));
 
-      // Auto-switch to deliverables view if we got results
       if (allDeliverables.length > 0) {
         setActiveView('deliverables');
       }
@@ -231,11 +223,11 @@ export default function ProjectWorkspace() {
     <div className="space-y-6">
       {/* Processing overlay */}
       {project.isProcessing && (
-        <div className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-6 flex items-center gap-4">
-          <div className="w-6 h-6 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin shrink-0" />
+        <div className="bg-[#B8860B]/5 border border-[#B8860B]/15 rounded-xl p-6 flex items-center gap-4">
+          <div className="w-6 h-6 border-2 border-[#B8860B]/30 border-t-[#B8860B] rounded-full animate-spin shrink-0" />
           <div>
-            <p className="text-sm text-white/60 font-medium">Processing documents...</p>
-            <p className="text-xs text-white/30 mt-0.5">{project.processingStep}</p>
+            <p className="text-sm text-[#1A1714] font-medium">Processing documents...</p>
+            <p className="text-xs text-[#8C8577] mt-0.5" style={{ fontFamily: 'Georgia, serif' }}>{project.processingStep}</p>
           </div>
         </div>
       )}
@@ -243,33 +235,33 @@ export default function ProjectWorkspace() {
       {/* Progress bar (if we have deliverables) */}
       {totalDeliverables > 0 && (
         <div className="grid grid-cols-4 gap-3">
-          <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
-            <p className="text-[11px] text-white/30 uppercase tracking-wider">Progress</p>
+          <div className="rounded-xl bg-white border border-[#E2DACB] p-4">
+            <p className="text-[11px] text-[#8C8577] uppercase tracking-wider">Progress</p>
             <div className="flex items-center gap-3 mt-2">
-              <p className="text-2xl font-bold text-white">{overallProgress}%</p>
-              <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
-                <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-500" style={{ width: `${overallProgress}%` }} />
+              <p className="text-2xl font-bold text-[#1A1714]">{overallProgress}%</p>
+              <div className="flex-1 h-2 rounded-full bg-[#F5F0E8] overflow-hidden">
+                <div className="h-full rounded-full bg-[#B8860B] transition-all duration-500" style={{ width: `${overallProgress}%` }} />
               </div>
             </div>
           </div>
-          <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
-            <p className="text-[11px] text-white/30 uppercase tracking-wider">Deliverables</p>
-            <p className="text-2xl font-bold text-white mt-2">{completedCount}<span className="text-white/20 text-lg">/{totalDeliverables}</span></p>
+          <div className="rounded-xl bg-white border border-[#E2DACB] p-4">
+            <p className="text-[11px] text-[#8C8577] uppercase tracking-wider">Deliverables</p>
+            <p className="text-2xl font-bold text-[#1A1714] mt-2">{completedCount}<span className="text-[#8C8577]/40 text-lg">/{totalDeliverables}</span></p>
           </div>
-          <div className={`rounded-xl border p-4 ${criticalCount > 0 ? 'bg-red-500/5 border-red-500/10' : 'bg-white/[0.02] border-white/[0.04]'}`}>
-            <p className="text-[11px] text-white/30 uppercase tracking-wider">Critical Items</p>
-            <p className={`text-2xl font-bold mt-2 ${criticalCount > 0 ? 'text-red-400' : 'text-white'}`}>{criticalCount}</p>
+          <div className={`rounded-xl border p-4 ${criticalCount > 0 ? 'bg-[#C0392B]/5 border-[#C0392B]/15' : 'bg-white border-[#E2DACB]'}`}>
+            <p className="text-[11px] text-[#8C8577] uppercase tracking-wider">Critical Items</p>
+            <p className={`text-2xl font-bold mt-2 ${criticalCount > 0 ? 'text-[#C0392B]' : 'text-[#1A1714]'}`}>{criticalCount}</p>
           </div>
-          <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
-            <p className="text-[11px] text-white/30 uppercase tracking-wider">Documents</p>
-            <p className="text-2xl font-bold text-white mt-2">{project.documents.length}</p>
+          <div className="rounded-xl bg-white border border-[#E2DACB] p-4">
+            <p className="text-[11px] text-[#8C8577] uppercase tracking-wider">Documents</p>
+            <p className="text-2xl font-bold text-[#1A1714] mt-2">{project.documents.length}</p>
           </div>
         </div>
       )}
 
       {/* Sub-navigation */}
       {totalDeliverables > 0 && (
-        <div className="flex gap-1 p-1 bg-white/[0.02] rounded-lg border border-white/[0.04] w-fit">
+        <div className="flex gap-1 p-1 bg-[#F5F0E8]/50 rounded-lg border border-[#E2DACB] w-fit">
           {[
             { id: 'deliverables' as const, label: 'Deliverables' },
             { id: 'upload' as const, label: 'Documents' },
@@ -280,7 +272,7 @@ export default function ProjectWorkspace() {
               key={v.id}
               onClick={() => setActiveView(v.id)}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                activeView === v.id ? 'bg-white/[0.08] text-white' : 'text-white/30 hover:text-white/50'
+                activeView === v.id ? 'bg-white text-[#1A1714] shadow-sm' : 'text-[#8C8577] hover:text-[#1A1714]'
               }`}
             >
               {v.label}
@@ -295,14 +287,14 @@ export default function ProjectWorkspace() {
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className="border-2 border-dashed border-white/[0.08] rounded-xl p-10 text-center hover:border-blue-500/30 transition-colors cursor-pointer"
+            className="border-2 border-dashed border-[#E2DACB] rounded-xl p-10 text-center hover:border-[#B8860B]/40 transition-colors cursor-pointer"
             onClick={() => document.getElementById('project-file-input')?.click()}
           >
-            <svg className="w-10 h-10 mx-auto mb-4 text-white/15" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+            <svg className="w-10 h-10 mx-auto mb-4 text-[#E2DACB]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
             </svg>
-            <p className="text-white/50 text-sm mb-1">Drop all your project documents here</p>
-            <p className="text-white/20 text-xs">Delivery schedules, contracts, sales estimates — we&apos;ll sort them automatically</p>
+            <p className="text-[#8C8577] text-sm mb-1">Drop all your project documents here</p>
+            <p className="text-[#8C8577]/60 text-xs" style={{ fontFamily: 'Georgia, serif' }}>Delivery schedules, contracts, sales estimates — we&apos;ll sort them automatically</p>
             <input
               id="project-file-input"
               type="file"
@@ -317,15 +309,15 @@ export default function ProjectWorkspace() {
           {project.documents.length > 0 && (
             <div className="space-y-2">
               {project.documents.map(doc => (
-                <div key={doc.id} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                  <svg className="w-4 h-4 text-white/20 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <div key={doc.id} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-[#E2DACB]">
+                  <svg className="w-4 h-4 text-[#E2DACB] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                   </svg>
-                  <span className="text-sm text-white/60 flex-1 truncate">{doc.name}</span>
+                  <span className="text-sm text-[#1A1714] flex-1 truncate">{doc.name}</span>
                   <select
                     value={doc.type}
                     onChange={(e) => changeDocType(doc.id, e.target.value as ProjectDocument['type'])}
-                    className="text-xs bg-white/[0.04] border border-white/[0.06] rounded-lg px-2 py-1 text-white/50 focus:outline-none"
+                    className="text-xs bg-[#F5F0E8] border border-[#E2DACB] rounded-lg px-2 py-1 text-[#8C8577] focus:outline-none focus:ring-2 focus:ring-[#B8860B]/20"
                   >
                     <option value="delivery-schedule">Delivery Schedule</option>
                     <option value="contract">Contract</option>
@@ -334,7 +326,7 @@ export default function ProjectWorkspace() {
                   </select>
                   <button
                     onClick={() => removeDocument(doc.id)}
-                    className="text-white/20 hover:text-red-400 transition-colors"
+                    className="text-[#E2DACB] hover:text-[#C0392B] transition-colors"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -346,7 +338,7 @@ export default function ProjectWorkspace() {
               <button
                 onClick={processAll}
                 disabled={project.isProcessing}
-                className="w-full py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium rounded-xl hover:from-blue-500 hover:to-violet-500 disabled:opacity-30 transition-all text-sm"
+                className="w-full py-3 bg-[#1A1714] text-[#FDFBF7] font-medium rounded-xl hover:bg-[#2A2720] disabled:opacity-30 transition-all text-sm"
               >
                 {project.isProcessing ? 'Processing...' : `Process ${project.documents.length} document${project.documents.length > 1 ? 's' : ''}`}
               </button>
@@ -358,25 +350,23 @@ export default function ProjectWorkspace() {
       {/* Deliverables tracker */}
       {activeView === 'deliverables' && (
         <div className="space-y-3">
-          {/* Group by category */}
           {Object.entries(
             project.deliverables.reduce((acc, d) => {
               (acc[d.category] = acc[d.category] || []).push(d);
               return acc;
             }, {} as Record<string, DeliverableItem[]>)
           ).map(([category, items]) => (
-            <div key={category} className="rounded-xl border border-white/[0.04] overflow-hidden">
-              <div className="px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.04] flex items-center justify-between">
+            <div key={category} className="rounded-xl border border-[#E2DACB] overflow-hidden">
+              <div className="px-4 py-2.5 bg-[#F5F0E8]/50 border-b border-[#E2DACB] flex items-center justify-between">
                 <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${CATEGORY_COLORS[category] || CATEGORY_COLORS.default}`}>
                   {category}
                 </span>
-                <span className="text-[11px] text-white/20">
+                <span className="text-[11px] text-[#8C8577]/60">
                   {items.filter(i => i.status === 'complete').length}/{items.length}
                 </span>
               </div>
               {items.map((item) => (
-                <div key={item.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.02] last:border-0 group">
-                  {/* Checkbox */}
+                <div key={item.id} className="flex items-center gap-3 px-4 py-3 border-b border-[#E2DACB]/60 last:border-0 group">
                   <button
                     onClick={() => updateDeliverable(item.id, {
                       status: item.status === 'complete' ? 'not-started' : 'complete',
@@ -384,8 +374,8 @@ export default function ProjectWorkspace() {
                     })}
                     className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${
                       item.status === 'complete'
-                        ? 'bg-emerald-500 border-emerald-500'
-                        : 'border-white/[0.12] hover:border-white/[0.25]'
+                        ? 'bg-[#2D7A4F] border-[#2D7A4F]'
+                        : 'border-[#E2DACB] hover:border-[#B8860B]'
                     }`}
                   >
                     {item.status === 'complete' && (
@@ -395,20 +385,17 @@ export default function ProjectWorkspace() {
                     )}
                   </button>
 
-                  {/* Name */}
-                  <span className={`text-sm flex-1 ${item.status === 'complete' ? 'text-white/30 line-through' : 'text-white/70'}`}>
+                  <span className={`text-sm flex-1 ${item.status === 'complete' ? 'text-[#8C8577] line-through' : 'text-[#1A1714]'}`}>
                     {item.name}
                   </span>
 
-                  {/* Priority badge */}
                   <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                    item.priority === 'critical' ? 'bg-red-500/15 text-red-400' :
-                    item.priority === 'high' ? 'bg-orange-500/15 text-orange-400' :
-                    item.priority === 'medium' ? 'bg-amber-500/15 text-amber-400' :
-                    'bg-white/[0.06] text-white/30'
+                    item.priority === 'critical' ? 'bg-[#C0392B]/10 text-[#C0392B]' :
+                    item.priority === 'high' ? 'bg-[#B8860B]/10 text-[#B8860B]' :
+                    item.priority === 'medium' ? 'bg-[#B8860B]/5 text-[#B8860B]/70' :
+                    'bg-[#F5F0E8] text-[#8C8577]'
                   }`}>{item.priority}</span>
 
-                  {/* Status dropdown */}
                   <select
                     value={item.status}
                     onChange={(e) => updateDeliverable(item.id, {
@@ -432,36 +419,36 @@ export default function ProjectWorkspace() {
       {/* Contract analysis view */}
       {activeView === 'contract' && project.contractAnalysis && (
         <div className="space-y-4">
-          <div className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-5">
-            <h3 className="text-sm font-medium text-blue-400/80 mb-2">Contract Summary</h3>
-            <p className="text-sm text-white/50 leading-relaxed">{project.contractAnalysis.summary}</p>
+          <div className="bg-[#F5F0E8]/50 border border-[#E2DACB] rounded-xl p-5">
+            <h3 className="text-sm font-medium text-[#B8860B] mb-2">Contract Summary</h3>
+            <p className="text-sm text-[#8C8577] leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>{project.contractAnalysis.summary}</p>
           </div>
 
           {project.contractAnalysis.redFlags.length > 0 && (
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-white/60">Red Flags ({project.contractAnalysis.redFlags.length})</h3>
+              <h3 className="text-sm font-medium text-[#1A1714]">Red Flags ({project.contractAnalysis.redFlags.length})</h3>
               {project.contractAnalysis.redFlags.map((flag, i) => (
                 <div key={i} className={`rounded-xl border p-4 ${
-                  flag.severity === 'high' ? 'bg-red-500/5 border-red-500/10' :
-                  flag.severity === 'medium' ? 'bg-amber-500/5 border-amber-500/10' :
-                  'bg-white/[0.02] border-white/[0.04]'
+                  flag.severity === 'high' ? 'bg-[#C0392B]/5 border-[#C0392B]/15' :
+                  flag.severity === 'medium' ? 'bg-[#B8860B]/5 border-[#B8860B]/15' :
+                  'bg-white border-[#E2DACB]'
                 }`}>
-                  <p className="text-sm text-white/70 font-medium">{flag.issue}</p>
-                  <p className="text-xs text-emerald-400/60 mt-1">{flag.recommendation}</p>
+                  <p className="text-sm text-[#1A1714] font-medium">{flag.issue}</p>
+                  <p className="text-xs text-[#2D7A4F] mt-1">{flag.recommendation}</p>
                 </div>
               ))}
             </div>
           )}
 
           {project.contractAnalysis.keyTerms.length > 0 && (
-            <div className="rounded-xl border border-white/[0.04] overflow-hidden">
-              <div className="px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.04]">
-                <span className="text-xs text-white/30 font-medium">Key Terms</span>
+            <div className="rounded-xl border border-[#E2DACB] overflow-hidden">
+              <div className="px-4 py-2.5 bg-[#F5F0E8]/50 border-b border-[#E2DACB]">
+                <span className="text-xs text-[#8C8577] font-medium">Key Terms</span>
               </div>
               {project.contractAnalysis.keyTerms.map((term, i) => (
-                <div key={i} className="flex items-center justify-between px-4 py-3 border-b border-white/[0.02] last:border-0">
-                  <span className="text-sm text-white/50">{term.term}</span>
-                  <span className="text-sm text-white/80 font-medium">{term.value}</span>
+                <div key={i} className="flex items-center justify-between px-4 py-3 border-b border-[#E2DACB]/60 last:border-0">
+                  <span className="text-sm text-[#8C8577]">{term.term}</span>
+                  <span className="text-sm text-[#1A1714] font-medium">{term.value}</span>
                 </div>
               ))}
             </div>
@@ -473,41 +460,40 @@ export default function ProjectWorkspace() {
       {activeView === 'finance' && project.financePlan && (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-xl bg-emerald-500/5 border border-emerald-500/10 p-4">
-              <p className="text-[11px] text-white/30 uppercase tracking-wider">Total MG</p>
-              <p className="text-xl font-bold text-emerald-400 mt-1">
+            <div className="rounded-xl bg-[#2D7A4F]/5 border border-[#2D7A4F]/15 p-4">
+              <p className="text-[11px] text-[#8C8577] uppercase tracking-wider">Total MG</p>
+              <p className="text-xl font-bold text-[#2D7A4F] mt-1">
                 ${((project.financePlan.salesEstimates?.reduce((sum, t) => sum + t.mgValue, 0) || 0) / 1_000_000).toFixed(1)}M
               </p>
             </div>
-            <div className="rounded-xl bg-blue-500/5 border border-blue-500/10 p-4">
-              <p className="text-[11px] text-white/30 uppercase tracking-wider">Budget</p>
-              <p className="text-xl font-bold text-blue-400 mt-1">
+            <div className="rounded-xl bg-[#B8860B]/5 border border-[#B8860B]/15 p-4">
+              <p className="text-[11px] text-[#8C8577] uppercase tracking-wider">Budget</p>
+              <p className="text-xl font-bold text-[#B8860B] mt-1">
                 ${((project.financePlan.totalBudget || 0) / 1_000_000).toFixed(1)}M
               </p>
             </div>
-            <div className="rounded-xl bg-violet-500/5 border border-violet-500/10 p-4">
-              <p className="text-[11px] text-white/30 uppercase tracking-wider">Territories</p>
-              <p className="text-xl font-bold text-violet-400 mt-1">
+            <div className="rounded-xl bg-white border border-[#E2DACB] p-4">
+              <p className="text-[11px] text-[#8C8577] uppercase tracking-wider">Territories</p>
+              <p className="text-xl font-bold text-[#1A1714] mt-1">
                 {project.financePlan.salesEstimates?.length || 0}
               </p>
             </div>
           </div>
 
-          {/* Territory breakdown */}
           {project.financePlan.salesEstimates && project.financePlan.salesEstimates.length > 0 && (
-            <div className="rounded-xl border border-white/[0.04] overflow-hidden">
-              <div className="grid grid-cols-3 gap-4 px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.04]">
-                <span className="text-[11px] text-white/20 uppercase tracking-wider">Territory</span>
-                <span className="text-[11px] text-white/20 uppercase tracking-wider">MG</span>
-                <span className="text-[11px] text-white/20 uppercase tracking-wider">Status</span>
+            <div className="rounded-xl border border-[#E2DACB] overflow-hidden">
+              <div className="grid grid-cols-3 gap-4 px-4 py-2.5 bg-[#F5F0E8]/50 border-b border-[#E2DACB]">
+                <span className="text-[11px] text-[#8C8577] uppercase tracking-wider">Territory</span>
+                <span className="text-[11px] text-[#8C8577] uppercase tracking-wider">MG</span>
+                <span className="text-[11px] text-[#8C8577] uppercase tracking-wider">Status</span>
               </div>
               {project.financePlan.salesEstimates.slice(0, 15).map((t, i) => (
-                <div key={i} className="grid grid-cols-3 gap-4 px-4 py-2.5 border-b border-white/[0.02] last:border-0">
-                  <span className="text-sm text-white/60">{t.territory}</span>
-                  <span className="text-sm text-white/70 font-medium">
+                <div key={i} className="grid grid-cols-3 gap-4 px-4 py-2.5 border-b border-[#E2DACB]/60 last:border-0">
+                  <span className="text-sm text-[#1A1714]">{t.territory}</span>
+                  <span className="text-sm text-[#1A1714] font-medium">
                     ${(t.mgValue / 1_000).toFixed(0)}K
                   </span>
-                  <span className={`text-xs font-medium ${t.status === 'sold' ? 'text-emerald-400' : 'text-white/30'}`}>
+                  <span className={`text-xs font-medium ${t.status === 'sold' ? 'text-[#2D7A4F]' : 'text-[#8C8577]'}`}>
                     {t.status || 'Estimated'}
                   </span>
                 </div>

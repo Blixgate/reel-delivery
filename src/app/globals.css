@@ -1,20 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #07070A;
-  --foreground: #ededed;
-  --primary: #3b82f6;
-  --primary-accent: #6366f1;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
+  --background: #FDFBF7;
+  --foreground: #1A1714;
+  --surface: #F5F0E8;
+  --surface-2: #EDE7DB;
+  --border: #E2DACB;
+  --border-light: #EDE7DB;
+  --muted: #8C8577;
+  --accent: #B8860B;
+  --accent-hover: #9A7209;
+  --success: #2D7A4F;
+  --warning: #B8860B;
+  --danger: #C0392B;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-accent: var(--primary-accent);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
@@ -29,10 +37,15 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Georgia', 'Times New Roman', serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -40,23 +53,22 @@ a {
   text-decoration: none;
 }
 
-button {
-  font-family: inherit;
+button, nav, label {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 input,
 select,
 textarea {
-  font-family: inherit;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
-/* Selection */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: white;
+  background: rgba(184, 134, 11, 0.15);
+  color: var(--foreground);
 }
 
-/* Custom scrollbar - dark theme */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -67,23 +79,21 @@ textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--border);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--muted);
 }
 
-/* Smooth transitions for interactive elements */
 @media (prefers-reduced-motion: no-preference) {
   a, button {
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
   }
 }
 
-/* Focus styles */
 :focus-visible {
-  outline: 2px solid rgba(99, 102, 241, 0.5);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }

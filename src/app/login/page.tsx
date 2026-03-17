@@ -43,84 +43,78 @@ export default function LoginPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#07070A] flex items-center justify-center px-6">
-      {/* Background effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.05] blur-[120px] bg-blue-600" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-[0.04] blur-[100px] bg-violet-600" />
-      </div>
+  const inputClass = "w-full px-3.5 py-2.5 bg-white border border-[#E2DACB] rounded-lg text-[#1A1714] text-sm placeholder-[#8C8577]/50 focus:outline-none focus:ring-2 focus:ring-[#B8860B]/20 focus:border-[#B8860B]/40 transition-all";
 
+  return (
+    <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center px-6">
       <div className="relative w-full max-w-sm">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-10">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-2.625 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 7.746 6 7.125v-1.5M4.875 8.25C5.496 8.25 6 8.754 6 9.375v1.5" />
-            </svg>
+          <div className="w-7 h-7 rounded bg-[#1A1714] flex items-center justify-center">
+            <span className="text-[#FDFBF7] text-[11px] font-bold tracking-tight">RD</span>
           </div>
-          <span className="font-semibold text-lg text-white tracking-tight">Reel Delivery</span>
+          <span className="font-semibold text-lg text-[#1A1714] tracking-tight">Reel Delivery</span>
         </Link>
 
         {/* Card */}
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 backdrop-blur-sm">
-          <h1 className="text-xl font-bold text-white mb-1 text-center">
+        <div className="bg-white border border-[#E2DACB] rounded-2xl p-8">
+          <h1 className="text-xl font-semibold text-[#1A1714] mb-1 text-center">
             {isRegister ? 'Create your account' : 'Welcome back'}
           </h1>
-          <p className="text-sm text-white/30 mb-8 text-center">
+          <p className="text-sm text-[#8C8577] mb-8 text-center" style={{ fontFamily: 'Georgia, serif' }}>
             {isRegister ? 'Start managing your film deliverables' : 'Sign in to your dashboard'}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {isRegister && (
               <div>
-                <label className="block text-xs font-medium text-white/40 mb-1.5">Full name</label>
+                <label className="block text-xs font-medium text-[#8C8577] mb-1.5">Full name</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Michael Jefferson"
-                  className="w-full px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white text-sm placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40 transition-all"
+                  className={inputClass}
                   required
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-medium text-white/40 mb-1.5">Email</label>
+              <label className="block text-xs font-medium text-[#8C8577] mb-1.5">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white text-sm placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40 transition-all"
+                className={inputClass}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-white/40 mb-1.5">Password</label>
+              <label className="block text-xs font-medium text-[#8C8577] mb-1.5">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3.5 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white text-sm placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40 transition-all"
+                className={inputClass}
                 required
                 minLength={6}
               />
             </div>
 
             {error && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
-                <p className="text-red-400 text-xs">{error}</p>
+              <div className="bg-[#C0392B]/5 border border-[#C0392B]/15 rounded-lg p-3">
+                <p className="text-[#C0392B] text-xs">{error}</p>
               </div>
             )}
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 bg-white text-black font-medium rounded-lg text-sm hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full py-2.5 bg-[#1A1714] text-[#FDFBF7] font-medium rounded-lg text-sm hover:bg-[#2A2720] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {isLoading
                 ? (isRegister ? 'Creating account...' : 'Signing in...')
@@ -129,17 +123,17 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-white/[0.06] text-center">
+          <div className="mt-6 pt-6 border-t border-[#E2DACB] text-center">
             <button
               onClick={() => { setIsRegister(!isRegister); setError(''); }}
-              className="text-xs text-white/30 hover:text-white/60 transition-colors"
+              className="text-xs text-[#8C8577] hover:text-[#1A1714] transition-colors"
             >
               {isRegister ? 'Already have an account? Sign in' : "Don't have an account? Create one"}
             </button>
           </div>
         </div>
 
-        <p className="text-center text-[11px] text-white/15 mt-6">
+        <p className="text-center text-[11px] text-[#8C8577]/50 mt-6" style={{ fontFamily: 'Georgia, serif' }}>
           Free during beta. No credit card required.
         </p>
       </div>
