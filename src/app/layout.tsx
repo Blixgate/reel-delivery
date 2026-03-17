@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Reel Delivery - Film Delivery Schedule Parser",
-  description: "Professional delivery schedule parser and tracker for independent film producers",
+  title: "Reel Delivery - Delivery Intelligence for Filmmakers",
+  description: "Upload your contracts, sales estimates, and delivery schedules. AI builds your deliverables, finance plan, and gap analysis automatically.",
 };
 
 export default function RootLayout({

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #1B3A5C;
-  --primary-accent: #2E5D8A;
+  --background: #07070A;
+  --foreground: #ededed;
+  --primary: #3b82f6;
+  --primary-accent: #6366f1;
   --success: #10B981;
   --warning: #F59E0B;
   --danger: #EF4444;
@@ -22,13 +22,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -42,18 +35,15 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-  color: var(--primary);
+  color: inherit;
   text-decoration: none;
-  transition: color 0.2s;
-}
-
-a:hover {
-  color: var(--primary-accent);
 }
 
 button {
@@ -66,21 +56,40 @@ textarea {
   font-family: inherit;
 }
 
-/* Custom scrollbar */
+/* Selection */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: white;
+}
+
+/* Custom scrollbar - dark theme */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Smooth transitions for interactive elements */
+@media (prefers-reduced-motion: no-preference) {
+  a, button {
+    transition: all 0.15s ease;
+  }
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.5);
+  outline-offset: 2px;
 }
