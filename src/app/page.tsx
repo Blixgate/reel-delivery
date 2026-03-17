@@ -58,7 +58,7 @@ export default function LandingPage() {
       {/* Hero */}
       <section
         ref={heroRef}
-        className="relative pt-32 pb-20 md:pt-44 md:pb-32"
+        className="relative pt-40 pb-24 md:pt-56 md:pb-40"
         style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
       >
         {/* Gradient orbs */}
@@ -127,7 +127,7 @@ export default function LandingPage() {
       </section>
 
       {/* Dashboard Preview */}
-      <section className="relative pb-20 md:pb-32">
+      <section className="relative pb-28 md:pb-44">
         <div className="max-w-5xl mx-auto px-6">
           <div className="relative rounded-2xl overflow-hidden border border-white/[0.06] bg-white/[0.02] shadow-2xl shadow-black/40">
             {/* Fake browser chrome */}
@@ -195,7 +195,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="relative py-20 md:py-32">
+      <section id="features" className="relative py-28 md:py-40">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="text-[12px] text-blue-400/60 uppercase tracking-[0.2em] font-medium mb-3">Platform</p>
@@ -207,7 +207,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-5">
             {[
               {
                 title: 'AI Document Reader',
@@ -289,7 +289,7 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="relative py-20 md:py-32">
+      <section id="how-it-works" className="relative py-28 md:py-40">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="text-[12px] text-violet-400/60 uppercase tracking-[0.2em] font-medium mb-3">Workflow</p>
@@ -316,7 +316,7 @@ export default function LandingPage() {
                 desc: 'Finance plan with capital stack. Gap analysis with priorities. Deliverables tracker with status. Everything production needs, built in seconds.',
               },
             ].map((item, i) => (
-              <div key={i} className="flex gap-8 py-8 border-b border-white/[0.04] last:border-0">
+              <div key={i} className="flex gap-8 py-10 border-b border-white/[0.04] last:border-0">
                 <div className="shrink-0">
                   <span className="text-[13px] font-mono text-white/10">{item.step}</span>
                 </div>
@@ -331,7 +331,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing / CTA */}
-      <section id="pricing" className="relative py-20 md:py-32">
+      <section id="pricing" className="relative py-28 md:py-40">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <div className="rounded-3xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-12 md:p-16">
             <p className="text-[12px] text-emerald-400/60 uppercase tracking-[0.2em] font-medium mb-3">Early access</p>
